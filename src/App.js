@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import QRCode from "qrcode";
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
+  const [qrImage, setQrImage] = useState(null);
+  const [text, setText] = useState("");
+  useEffect(() => {}, []);
+
+  const onSubmit = () => {
+    QRCode.toDataURL(text)
+      .then((url) => {
+        setQrImage(url);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <img src={qrImage} alt="qr" />
+      <input onChange={(e) => setText(e.target.value)} type="text" />
+      <button onClick={onSubmit} style={{ marginTop: 5 }}>
+        submit
+      </button>
     </div>
   );
 }
